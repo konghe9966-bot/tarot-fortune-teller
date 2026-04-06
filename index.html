@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>塔罗牌占卜 - 神秘预言</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        :root {
+            --primary-bg: #0f0f23;
+            --card-bg: #1a1a2e;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0c0;
+            --accent-color: #8a2be2;
+            --accent-hover: #9b4dff;
+            --border-color: #2d2d42;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            --shadow-hover: 0 20px 50px rgba(138, 43, 226, 0.3);
+            --success-color: #00ff9d;
+            --warning-color: #ff6b9d;
+            --mystic-purple: #9370db;
+            --neon-blue: #00d4ff;
+            --neon-pink: #ff00ff;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #2d1b69 100%);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0 30px;
+        }
+        
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-pink) 50%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: linear-gradient(145deg, rgba(26, 26, 46, 0.9) 0%, rgba(40, 40, 60, 0.9) 100%);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
+        }
+        
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--neon-blue);
+        }
+        
+        .card-title i {
+            font-size: 1.8rem;
+        }
+        
+        /* 控制面板样式 */
+        .control-group {
+            margin-bottom: 25px;
+        }
+        
+        .control-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+        }
+        
+        .select-wrapper, .input-wrapper {
+            position: relative;
+        }
+        
+        select, input, .radio-group {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.2);
+        }
+        
+        .radio-group {
+            display: flex;
+            padding: 8px;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .radio-option {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .radio-option.selected {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--neon-pink) 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+        
+        .radio-option:hover:not(.selected) {
+            background: rgba(138, 43, 226, 0.2);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--neon-pink) 100%);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 塔罗牌展示区 - 现代设计 */
+        .tarot-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .tarot-cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
+            }
+        }
+        
+        .tarot-card {
+            aspect-ratio: 2/3;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 
+                        inset 0 0 50px rgba(255, 255, 255, 0.05);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            padding: 25px 18px;
+            isolation: isolate;
+        }
+        
+        .tarot-card:hover {
+            transform: translateY(-15px) scale(1.08);
+            box-shadow: 0 30px 60px rgba(138, 43, 226, 0.6),
+                       inset 0 0 80px rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+        
+        .tarot-card.back {
+            background: linear-gradient(135deg, 
+                rgba(26, 26, 46, 0.95) 0%, 
+                rgba(45, 27, 105, 0.95) 50%,
+                rgba(76, 0, 153, 0.95) 100%);
+            color: white;
+            border: 3px solid;
+            border-image: linear-gradient(45deg, #00d4ff, #8a2be2, #ff00ff) 1;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .tarot-card.back::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stars" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="0.8" fill="rgba(255,255,255,0.3)"/></pattern></defs><rect width="100" height="100" fill="url(%23stars)"/></svg>');
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        .tarot-card.front {
+            border: 3px solid;
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.08) 0%, 
+                rgba(255, 255, 255, 0.02) 100%);
+            color: var(--text-primary);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* 为每张牌添加独特的背景和边框颜色 */
+        .tarot-card[data-card-id="0"] { border-color: #FFD700; background: linear-gradient(145deg, rgba(255, 215, 0, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="1"] { border-color: #00D4FF; background: linear-gradient(145deg, rgba(0, 212, 255, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="2"] { border-color: #9370DB; background: linear-gradient(145deg, rgba(147, 112, 219, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="3"] { border-color: #FF6B9D; background: linear-gradient(145deg, rgba(255, 107, 157, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="4"] { border-color: #FF8C00; background: linear-gradient(145deg, rgba(255, 140, 0, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="5"] { border-color: #20B2AA; background: linear-gradient(145deg, rgba(32, 178, 170, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="6"] { border-color: #FF1493; background: linear-gradient(145deg, rgba(255, 20, 147, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="7"] { border-color: #4169E1; background: linear-gradient(145deg, rgba(65, 105, 225, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="8"] { border-color: #FF4500; background: linear-gradient(145deg, rgba(255, 69, 0, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="9"] { border-color: #8FBC8F; background: linear-gradient(145deg, rgba(143, 188, 143, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="10"] { border-color: #FFD700; background: linear-gradient(145deg, rgba(255, 215, 0, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="11"] { border-color: #00CED1; background: linear-gradient(145deg, rgba(0, 206, 209, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="12"] { border-color: #8A2BE2; background: linear-gradient(145deg, rgba(138, 43, 226, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="13"] { border-color: #2F4F4F; background: linear-gradient(145deg, rgba(47, 79, 79, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="14"] { border-color: #FF69B4; background: linear-gradient(145deg, rgba(255, 105, 180, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="15"] { border-color: #800080; background: linear-gradient(145deg, rgba(128, 0, 128, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="16"] { border-color: #DC143C; background: linear-gradient(145deg, rgba(220, 20, 60, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="17"] { border-color: #87CEEB; background: linear-gradient(145deg, rgba(135, 206, 235, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="18"] { border-color: #C71585; background: linear-gradient(145deg, rgba(199, 21, 133, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="19"] { border-color: #FFD700; background: linear-gradient(145deg, rgba(255, 215, 0, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="20"] { border-color: #FF8C00; background: linear-gradient(145deg, rgba(255, 140, 0, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        .tarot-card[data-card-id="21"] { border-color: #32CD32; background: linear-gradient(145deg, rgba(50, 205, 50, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%); }
+        
+        .tarot-card-number {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            font-weight: 900;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(40, 40, 60, 0.7) 100%);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 3px solid;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .tarot-card:hover .tarot-card-number {
+            transform: scale(1.1);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.8);
+        }
+        
+        .tarot-card-name {
+            font-weight: 800;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 0 12px;
+            margin-top: 25px;
+            text-shadow: 0 3px 8px rgba(0, 0, 0, 0.8),
+                         0 0 20px currentColor;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg, 
+                rgba(0, 0, 0, 0.4) 0%, 
+                rgba(0, 0, 0, 0.2) 100%);
+            padding: 10px 15px;
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tarot-card-icon {
+            font-size: 5rem;
+            margin: 25px 0;
+            text-shadow: 0 0 30px currentColor,
+                        0 0 60px rgba(255, 255, 255, 0.4);
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .tarot-card:hover .tarot-card-icon {
+            transform: scale(1.1);
+            filter: drop-shadow(0 8px 25px rgba(0, 0, 0, 0.7));
+        }
+        
+        .tarot-card-meaning {
+            font-size: 1rem;
+            text-align: center;
+            font-style: italic;
+            background: linear-gradient(135deg, 
+                rgba(0, 0, 0, 0.6) 0%, 
+                rgba(40, 40, 60, 0.6) 100%);
+            padding: 12px 16px;
+            border-radius: 12px;
+            width: 100%;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .tarot-card.upright {
+            border-top: 5px solid var(--success-color);
+        }
+        
+        .tarot-card.reversed {
+            border-top: 5px solid var(--warning-color);
+        }
+        
+        .tarot-card.reversed .tarot-card-number,
+        .tarot-card.reversed .tarot-card-name,
+        .tarot-card.reversed .tarot-card-icon,
+        .tarot-card.reversed .tarot-card-meaning {
+            transform: rotate(180deg);
+        }
+        
+        .tarot-card.upright .tarot-card-number {
+            border-color: var(--success-color);
+        }
+        
+        .tarot-card.reversed .tarot-card-number {
+            border-color: var(--warning-color);
+        }
+        
+        /* 结果展示区 */
+        .reading-result {
+            margin-top: 30px;
+        }
+        
+        .reading-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--neon-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-detail {
+            background: linear-gradient(145deg, rgba(26, 26, 46, 0.9) 0%, rgba(40, 40, 60, 0.9) 100%);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .card-detail-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--neon-blue) 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-detail-position {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .card-detail-position.upright {
+            background: linear-gradient(135deg, var(--success-color) 0%, #00cc88 100%);
+            color: #000;
+            box-shadow: 0 5px 15px rgba(0, 255, 157, 0.3);
+        }
+        
+        .card-detail-position.reversed {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #ff3d7a 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+        }
+        
+        .card-detail-content {
+            line-height: 1.7;
+        }
+        
+        .card-detail-content h4 {
+            margin: 20px 0 10px;
+            color: var(--neon-blue);
+            font-size: 1.2rem;
+        }
+        
+        .card-detail-content p {
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .reading-interpretation {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+            border-radius: 20px;
+            border-left: 5px solid var(--accent-color);
+        }
+        
+        .reading-interpretation h4 {
+            color: var(--neon-blue);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .reading-interpretation p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(0, 212, 255, 0.1);
+            border-left-color: var(--neon-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading p {
+            font-size: 1.2rem;
+            color: var(--neon-blue);
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+        }
+        
+        .disclaimer {
+            font-size: 0.9rem;
+            color: #8e8e93;
+            max-width: 700px;
+            margin: 20px auto 0;
+            line-height: 1.6;
+        }
+        
+        /* 卡片装饰元素 - 增强版 */
+        .card-decoration {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            border-radius: 24px;
+            overflow: hidden;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 212, 255, 0.15) 0%, transparent 50%);
+        }
+        
+        .card-decoration::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, 
+                transparent 25%, 
+                rgba(255, 255, 255, 0.08) 50%, 
+                transparent 75%);
+            animation: shine 6s infinite linear;
+            opacity: 0.5;
+        }
+        
+        .card-decoration::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: 
+                repeating-linear-gradient(0deg, 
+                    transparent, 
+                    transparent 2px, 
+                    rgba(255, 255, 255, 0.03) 2px, 
+                    rgba(255, 255, 255, 0.03) 4px),
+                repeating-linear-gradient(90deg, 
+                    transparent, 
+                    transparent 2px, 
+                    rgba(255, 255, 255, 0.03) 2px, 
+                    rgba(255, 255, 255, 0.03) 4px);
+            opacity: 0.3;
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        /* 神秘符文装饰 */
+        .mystic-runes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.3;
+            background: 
+                radial-gradient(circle at 30% 30%, currentColor 1px, transparent 1px),
+                radial-gradient(circle at 70% 70%, currentColor 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        /* 塔罗牌专属符号 */
+        .tarot-symbols {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+        }
+        
+        .tarot-symbols::before,
+        .tarot-symbols::after {
+            content: "✦";
+            position: absolute;
+            font-size: 1.5rem;
+            color: currentColor;
+        }
+        
+        .tarot-symbols::before {
+            top: 20%;
+            left: 20%;
+        }
+        
+        .tarot-symbols::after {
+            bottom: 20%;
+            right: 20%;
+        }
+        
+        /* 能量条 - 增强版 */
+        .energy-bar {
+            width: 90%;
+            height: 8px;
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .energy-bar::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            animation: energyFlow 2s infinite linear;
+            z-index: 1;
+        }
+        
+        @keyframes energyFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .energy-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 15px currentColor;
+        }
+        
+        .energy-fill.upright {
+            background: linear-gradient(90deg, 
+                var(--success-color) 0%, 
+                #00cc88 50%,
+                #00ff9d 100%);
+        }
+        
+        .energy-fill.reversed {
+            background: linear-gradient(90deg, 
+                var(--warning-color) 0%, 
+                #ff3d7a 50%,
+                #ff6b9d 100%);
+        }
+        
+        /* 卡牌发光效果 */
+        .tarot-card.glow {
+            animation: cardGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes cardGlow {
+            0% {
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6),
+                           inset 0 0 50px rgba(255, 255, 255, 0.05),
+                           0 0 15px rgba(138, 43, 226, 0.3);
+            }
+            100% {
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6),
+                           inset 0 0 50px rgba(255, 255, 255, 0.05),
+                           0 0 30px rgba(138, 43, 226, 0.6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-crystal-ball"></i> 神秘塔罗占卜</h1>
+            <p class="subtitle">探索未知的命运轨迹，塔罗牌为您揭示人生的秘密与可能性。现代设计，传统智慧，专为年轻人打造的神秘体验。</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-sliders-h"></i> 占卜设置</h2>
+                
+                <div class="control-group">
+                    <label class="control-label">占卜类型</label>
+                    <div class="select-wrapper">
+                        <select id="readingType">
+                            <option value="single">单张牌占卜（当前状况）</option>
+                            <option value="three">三张牌占卜（过去-现在-未来）</option>
+                            <option value="celtic">凯尔特十字占卜（综合解读）</option>
+                            <option value="relationship">关系占卜（感情与人际）</option>
+                            <option value="career">事业与职业发展</option>
+                            <option value="spiritual">灵性成长指引</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">问题焦点（可选）</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="questionFocus" placeholder="例如：感情发展、职业选择、个人成长、财务决策...">
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">牌阵方向</label>
+                    <div class="radio-group">
+                        <div class="radio-option selected" data-value="both">正位与逆位</div>
+                        <div class="radio-option" data-value="upright">仅正位</div>
+                        <div class="radio-option" data-value="reversed">仅逆位</div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">牌组选择</label>
+                    <div class="radio-group">
+                        <div class="radio-option selected" data-value="major">大阿卡那（22张主牌）</div>
+                        <div class="radio-option" data-value="full">完整塔罗（78张）</div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">视觉主题</label>
+                    <div class="radio-group">
+                        <div class="radio-option selected" data-value="modern">现代霓虹</div>
+                        <div class="radio-option" data-value="mystic">神秘紫韵</div>
+                        <div class="radio-option" data-value="celestial">星空幻想</div>
+                    </div>
+                </div>
+                
+                <button class="btn" id="drawCards">
+                    <i class="fas fa-random"></i> 洗牌并抽牌
+                </button>
+                
+                <button class="btn secondary" id="resetReading" style="margin-top: 15px;">
+                    <i class="fas fa-redo"></i> 重新开始
+                </button>
+            </div>
+            
+            <div class="card">
+                <h2 class="card-title"><i class="fas fa-eye"></i> 塔罗牌展示</h2>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>正在连接宇宙能量，为您抽取塔罗牌...</p>
+                </div>
+                
+                <div class="tarot-cards-container" id="tarotCardsContainer">
+                    <!-- 塔罗牌会动态插入到这里 -->
+                    <div class="tarot-card back glow" id="instructionCard">
+                        <div class="card-decoration"></div>
+                        <div class="mystic-runes"></div>
+                        <div class="tarot-symbols"></div>
+                        <div class="card-content">
+                            <div style="position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; border: 2px dashed rgba(0, 212, 255, 0.3); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+                                <i class="fas fa-crystal-ball" style="font-size: 4rem; color: var(--neon-blue); margin-bottom: 20px; text-shadow: 0 0 30px var(--neon-blue);"></i>
+                                <div style="font-weight: 800; font-size: 1.4rem; text-align: center; margin-bottom: 10px; background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">神秘塔罗之门</div>
+                                <div style="text-align: center; font-size: 1.1rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 5px;">点击"洗牌并抽牌"开启命运之旅</div>
+                                <div style="text-align: center; font-size: 0.9rem; color: rgba(255, 255, 255, 0.6); font-style: italic;">连接宇宙能量，揭示生命奥秘</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reading-result" id="readingResult">
+                    <!-- 占卜结果会动态插入到这里 -->
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>塔罗牌占卜仅供娱乐参考，命运掌握在自己手中</p>
+            <p class="disclaimer">本工具生成的塔罗牌解读仅供参考，不构成专业建议。请理性看待占卜结果，生活中的决定仍需依靠自己的判断。设计灵感来源于现代年轻人审美趋势，融合了神秘学与数字艺术。</p>
+        </footer>
+    </div>
+
+    <script>
+        // 塔罗牌数据 - 增强版
+        const tarotDeck = [
+            { id: 0, name: "愚者", number: "0", upright: "新的开始,冒险,自由,无限可能", reversed: "鲁莽,犹豫不决,风险,天真", element: "风", planet: "天王星", energy: 85, symbol: "♈" },
+            { id: 1, name: "魔术师", number: "I", upright: "创造力,技能,意志力, manifestation", reversed: "欺骗,未实现的潜力,混乱, manipulation", element: "水星", planet: "水星", energy: 90, symbol: "♉" },
+            { id: 2, name: "女祭司", number: "II", upright: "直觉,神秘,潜意识,wisdom", reversed: "压抑,秘密,肤浅, hidden feelings", element: "月亮", planet: "月亮", energy: 80, symbol: "♊" },
+            { id: 3, name: "女皇", number: "III", upright: "丰饶,滋养,感性, abundance", reversed: "依赖,停滞,忽视, smothering", element: "金星", planet: "金星", energy: 95, symbol: "♋" },
+            { id: 4, name: "皇帝", number: "IV", upright: "权威,结构,稳定, leadership", reversed: "控制,僵化,缺乏自律, tyranny", element: "白羊座", planet: "火星", energy: 75, symbol: "♌" },
+            { id: 5, name: "教皇", number: "V", upright: "传统,信仰,教育, spirituality", reversed: "叛逆,教条,束缚, unconventional", element: "金牛座", planet: "金星", energy: 70, symbol: "♍" },
+            { id: 6, name: "恋人", number: "VI", upright: "爱情,选择,和谐, partnership", reversed: "冲突,不和谐,错误选择, imbalance", element: "双子座", planet: "水星", energy: 85, symbol: "♎" },
+            { id: 7, name: "战车", number: "VII", upright: "意志力,胜利,自律, determination", reversed: "失控,侵略,缺乏控制, lack of direction", element: "巨蟹座", planet: "月亮", energy: 80, symbol: "♏" },
+            { id: 8, name: "力量", number: "VIII", upright: "勇气,耐心,影响力, inner strength", reversed: "软弱,怀疑,缺乏信心, insecurity", element: "狮子座", planet: "太阳", energy: 90, symbol: "♐" },
+            { id: 9, name: "隐士", number: "IX", upright: "内省,寻求,智慧, soul-searching", reversed: "孤独,拒绝帮助,迷失, isolation", element: "处女座", planet: "水星", energy: 65, symbol: "♑" },
+            { id: 10, name: "命运之轮", number: "X", upright: "命运,转折点,机会, cycles", reversed: "坏运气,抗拒变化,延迟, resistance", element: "木星", planet: "木星", energy: 75, symbol: "♒" },
+            { id: 11, name: "正义", number: "XI", upright: "公正,真理,平衡, karmic justice", reversed: "不公,偏见,不负责任, dishonesty", element: "天秤座", planet: "金星", energy: 70, symbol: "♓" },
+            { id: 12, name: "倒吊人", number: "XII", upright: "牺牲,新视角,等待, surrender", reversed: "停滞,无谓牺牲,抗拒, martyrdom", element: "水", planet: "海王星", energy: 60, symbol: "♈" },
+            { id: 13, name: "死神", number: "XIII", upright: "结束,转变,新生, transformation", reversed: "抗拒变化,停滞,恐惧, fear of change", element: "天蝎座", planet: "冥王星", energy: 50, symbol: "♉" },
+            { id: 14, name: "节制", number: "XIV", upright: "平衡,调和,耐心, moderation", reversed: "失衡,过度,急躁, extremes", element: "射手座", planet: "木星", energy: 85, symbol: "♊" },
+            { id: 15, name: "恶魔", number: "XV", upright: "束缚,物质主义,无知, attachment", reversed: "解放,觉醒,挣脱束缚, breaking free", element: "摩羯座", planet: "土星", energy: 40, symbol: "♋" },
+            { id: 16, name: "高塔", number: "XVI", upright: "剧变,启示,觉醒, upheaval", reversed: "避免灾难,恐惧改变,压抑, avoiding disaster", element: "火星", planet: "火星", energy: 30, symbol: "♌" },
+            { id: 17, name: "星星", number: "XVII", upright: "希望,灵感,宁静, hope", reversed: "失望,缺乏信心,悲观, hopelessness", element: "水瓶座", planet: "天王星", energy: 95, symbol: "♍" },
+            { id: 18, name: "月亮", number: "XVIII", upright: "幻觉,恐惧,潜意识, illusion", reversed: "释放恐惧,理解,真相, facing fears", element: "双鱼座", planet: "海王星", energy: 55, symbol: "♎" },
+            { id: 19, name: "太阳", number: "XIX", upright: "快乐,成功,活力, joy", reversed: "暂时挫折,过度自信,自负, temporary setback", element: "太阳", planet: "太阳", energy: 100, symbol: "♏" },
+            { id: 20, name: "审判", number: "XX", upright: "觉醒,复兴,内省, awakening", reversed: "自我怀疑,恐惧判断,停滞, self-doubt", element: "火", planet: "冥王星", energy: 80, symbol: "♐" },
+            { id: 21, name: "世界", number: "XXI", upright: "完成,成功,旅程结束, completion", reversed: "未完成,延迟,需要耐心, unfinished business", element: "土星", planet: "土星", energy: 90, symbol: "♑" }
+        ];
+
+        // 占卜解读模板
+        const readingTemplates = {
+            single: {
+                name: "单张牌占卜",
+                description: "这张牌反映了您当前状况的核心能量与启示，是当下最重要的指引。",
+                positions: ["当前状况"]
+            },
+            three: {
+                name: "三张牌占卜",
+                description: "这三张牌分别代表过去、现在和未来，揭示了您人生旅程的脉络与发展趋势。",
+                positions: ["过去", "现在", "未来"]
+            },
+            celtic: {
+                name: "凯尔特十字占卜",
+                description: "这个经典的牌阵提供对您问题的全面解读，涵盖各个层面的影响因素与潜在发展。",
+                positions: ["现状", "挑战", "理想", "基础", "过去", "未来", "自我", "环境", "希望与恐惧", "结果"]
+            },
+            relationship: {
+                name: "关系占卜",
+                description: "此牌阵专门解读人际关系，包括感情、友情和家庭关系的动态与潜在发展。",
+                positions: ["您的状态", "对方状态", "关系现状", "挑战", "潜在发展", "建议"]
+            },
+            career: {
+                name: "事业占卜",
+                description: "此牌阵专注于职业发展、工作环境和事业目标，提供职场指引。",
+                positions: ["当前职业状况", "优势", "挑战", "机会", "建议", "长期发展"]
+            },
+            spiritual: {
+                name: "灵性成长指引",
+                description: "此牌阵关注内在成长与灵性发展，帮助您连接内在智慧。",
+                positions: ["当前能量", "阻碍", "内在资源", "成长方向", "潜在突破", "灵性礼物"]
+            }
+        };
+
+        // 图标映射 - 增强版
+        const cardIcons = [
+            "fas fa-hiking", "fas fa-hat-wizard", "fas fa-moon", "fas fa-crown", 
+            "fas fa-chess-king", "fas fa-church", "fas fa-heart", "fas fa-chariot", 
+            "fas fa-fist-raised", "fas fa-mountain", "fas fa-sync", "fas fa-balance-scale", 
+            "fas fa-user", "fas fa-skull-crossbones", "fas fa-wine-glass-alt", "fas fa-gem", 
+            "fas fa-bolt", "fas fa-star", "fas fa-cloud-moon", "fas fa-sun", 
+            "fas fa-bell", "fas fa-globe-americas"
+        ];
+
+        // 当前占卜数据
+        let currentReading = {
+            type: "single",
+            cards: [],
+            question: "",
+            positionType: "both",
+            theme: "modern"
+        };
+
+        // DOM元素
+        const readingTypeSelect = document.getElementById("readingType");
+        const questionFocusInput = document.getElementById("questionFocus");
+        const drawCardsBtn = document.getElementById("drawCards");
+        const resetReadingBtn = document.getElementById("resetReading");
+        const tarotCardsContainer = document.getElementById("tarotCardsContainer");
+        const readingResult = document.getElementById("readingResult");
+        const loading = document.getElementById("loading");
+        const radioOptions = document.querySelectorAll(".radio-option");
+
+        // 初始化
+        function init() {
+            // 设置单选按钮点击事件
+            radioOptions.forEach(option => {
+                option.addEventListener("click", function() {
+                    const group = this.parentElement;
+                    group.querySelectorAll(".radio-option").forEach(opt => {
+                        opt.classList.remove("selected");
+                    });
+                    this.classList.add("selected");
+                    
+                    // 如果是主题选择
+                    if (this.parentElement.querySelector('.radio-option[data-value="modern"]')) {
+                        const themeValue = this.getAttribute("data-value");
+                        if (["modern", "mystic", "celestial"].includes(themeValue)) {
+                            currentReading.theme = themeValue;
+                            applyTheme(themeValue);
+                        }
+                    }
+                });
+            });
+            
+            // 绑定按钮事件
+            drawCardsBtn.addEventListener("click", drawCards);
+            resetReadingBtn.addEventListener("click", resetReading);
+            
+            // 初始化示例
+            resetReading();
+            
+            // 添加键盘快捷键
+            document.addEventListener("keydown", function(e) {
+                if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                    drawCards();
+                }
+                if (e.key === "Escape") {
+                    resetReading();
+                }
+            });
+        }
+
+        // 应用主题
+        function applyTheme(theme) {
+            const root = document.documentElement;
+            
+            if (theme === "mystic") {
+                root.style.setProperty("--accent-color", "#9370db");
+                root.style.setProperty("--accent-hover", "#a67bff");
+                root.style.setProperty("--neon-blue", "#a67bff");
+                root.style.setProperty("--neon-pink", "#d8a7ff");
+            } else if (theme === "celestial") {
+                root.style.setProperty("--accent-color", "#4169e1");
+                root.style.setProperty("--accent-hover", "#5a7dff");
+                root.style.setProperty("--neon-blue", "#87ceeb");
+                root.style.setProperty("--neon-pink", "#c9a7ff");
+            } else {
+                root.style.setProperty("--accent-color", "#8a2be2");
+                root.style.setProperty("--accent-hover", "#9b4dff");
+                root.style.setProperty("--neon-blue", "#00d4ff");
+                root.style.setProperty("--neon-pink", "#ff00ff");
+            }
+        }
+
+        // 洗牌函数
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            return deck;
+        }
+
+        // 抽牌函数
+        function drawCards() {
+            const readingType = readingTypeSelect.value;
+            const question = questionFocusInput.value;
+            const positionType = document.querySelector('.radio-option[data-value="both"]').classList.contains("selected") ? "both" :
+                               document.querySelector('.radio-option[data-value="upright"]').classList.contains("selected") ? "upright" : "reversed";
+            
+            // 显示加载动画
+            loading.classList.add("active");
+            tarotCardsContainer.innerHTML = "";
+            readingResult.innerHTML = "";
+            
+            // 设置当前占卜
+            currentReading.type = readingType;
+            currentReading.question = question;
+            currentReading.positionType = positionType;
+            currentReading.cards = [];
+            
+            // 根据占卜类型确定抽牌数量
+            let numCards = 1;
+            if (readingType === "three") numCards = 3;
+            else if (readingType === "celtic") numCards = 10;
+            else if (readingType === "relationship") numCards = 6;
+            else if (readingType === "career") numCards = 6;
+            else if (readingType === "spiritual") numCards = 6;
+            
+            // 洗牌
+            const shuffledDeck = shuffleDeck([...tarotDeck]);
+            
+            // 延迟显示结果，增加仪式感
+            setTimeout(() => {
+                // 抽牌
+                for (let i = 0; i < numCards; i++) {
+                    const card = shuffledDeck[i];
+                    const isUpright = positionType === "upright" || 
+                                     (positionType === "both" && Math.random() > 0.5);
+                    
+                    currentReading.cards.push({
+                        ...card,
+                        position: isUpright ? "upright" : "reversed",
+                        positionName: readingTemplates[readingType].positions[i] || `位置${i+1}`,
+                        energyLevel: isUpright ? card.energy : 100 - card.energy
+                    });
+                }
+                
+                // 显示卡片
+                displayCards();
+                
+                // 显示解读
+                displayReading();
+                
+                // 隐藏加载动画
+                loading.classList.remove("active");
+                
+                // 添加庆祝效果
+                if (currentReading.cards.filter(card => card.position === "upright").length > currentReading.cards.length / 2) {
+                    setTimeout(() => {
+                        showConfetti();
+                    }, 500);
+                }
+            }, 2000);
+        }
+
+        // 显示卡片 - 增强版
+        function displayCards() {
+            tarotCardsContainer.innerHTML = "";
+            
+            currentReading.cards.forEach((card, index) => {
+                const cardElement = document.createElement("div");
+                cardElement.className = `tarot-card front ${card.position}`;
+                cardElement.setAttribute("data-card-id", card.id);
+                cardElement.setAttribute("data-energy", card.energyLevel);
+                
+                const energyPercentage = card.energyLevel;
+                const isHighEnergy = energyPercentage > 70;
+                
+                if (isHighEnergy) {
+                    cardElement.classList.add("glow");
+                }
+                
+                // 为每张卡牌生成独特的渐变背景
+                const gradients = [
+                    "linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%)",
+                    "linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%)",
+                    "linear-gradient(135deg, rgba(147, 112, 219, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%)",
+                    "linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(26, 26, 46, 0.9) 100%)"
+                ];
+                
+                const gradient = gradients[card.id % gradients.length];
+                
+                cardElement.innerHTML = `
+                    <div class="card-decoration"></div>
+                    <div class="mystic-runes"></div>
+                    <div class="tarot-symbols"></div>
+                    <div class="card-content">
+                        <div class="tarot-card-number">${card.number}</div>
+                        <i class="${cardIcons[card.id]} tarot-card-icon"></i>
+                        <div class="tarot-card-name">${card.name}</div>
+                        
+                        <div class="energy-bar">
+                            <div class="energy-fill ${card.position}" style="width: ${energyPercentage}%"></div>
+                        </div>
+                        
+                        <div class="tarot-card-meaning">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px;">
+                                <span>${card.position === "upright" ? "正位" : "逆位"}</span>
+                                <span>${card.element} · ${card.planet}</span>
+                            </div>
+                            <div style="font-size: 0.9rem; font-weight: 600;">
+                                能量 ${energyPercentage}%
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // 动态设置卡片背景
+                cardElement.style.background = gradient;
+                cardElement.style.borderColor = card.position === "upright" ? "var(--success-color)" : "var(--warning-color)";
+                
+                // 为高能量卡片添加脉冲效果
+                if (isHighEnergy) {
+                    setTimeout(() => {
+                        cardElement.style.animation = "cardGlow 2s ease-in-out infinite alternate";
+                    }, index * 200);
+                }
+                
+                // 添加点击事件查看详情
+                cardElement.addEventListener("click", () => showCardDetail(card, index));
+                
+                // 添加鼠标悬停效果
+                cardElement.addEventListener("mouseenter", () => {
+                    if (isHighEnergy) {
+                        cardElement.style.animation = "cardGlow 1s ease-in-out infinite alternate";
+                    }
+                });
+                
+                cardElement.addEventListener("mouseleave", () => {
+                    if (isHighEnergy) {
+                        cardElement.style.animation = "cardGlow 2s ease-in-out infinite alternate";
+                    }
+                });
+                
+                // 添加卡片出现动画
+                cardElement.style.opacity = "0";
+                cardElement.style.transform = "scale(0.8) translateY(20px)";
+                
+                tarotCardsContainer.appendChild(cardElement);
+                
+                // 延迟动画
+                setTimeout(() => {
+                    cardElement.style.transition = "all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                    cardElement.style.opacity = "1";
+                    cardElement.style.transform = "scale(1) translateY(0)";
+                }, index * 150);
+            });
+        }
+
+        // 显示卡片详情 - 增强版
+        function showCardDetail(card, index) {
+            readingResult.innerHTML = "";
+            
+            const meaning = card.position === "upright" ? card.upright : card.reversed;
+            const positionClass = card.position === "upright" ? "upright" : "reversed";
+            const positionText = card.position === "upright" ? "正位" : "逆位";
+            const energyPercentage = card.energyLevel;
+            const isHighEnergy = energyPercentage > 70;
+            
+            const detailHtml = `
+                <div style="margin-bottom: 30px; position: relative;">
+                    <div style="position: absolute; top: 0; right: 0; width: 120px; height: 180px; opacity: 0.4;">
+                        <div class="tarot-card front ${card.position}" style="width: 100%; height: 100%; margin: 0; padding: 15px;">
+                            <div class="card-decoration"></div>
+                            <div class="card-content">
+                                <div class="tarot-card-number" style="top: 10px; left: 10px; font-size: 1.2rem; width: 35px; height: 35px;">${card.number}</div>
+                                <i class="${cardIcons[card.id]}" style="font-size: 3rem; margin: 15px 0;"></i>
+                                <div style="font-weight: 700; font-size: 1rem;">${card.name}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="reading-title"><i class="fas fa-crystal-ball"></i> 塔罗牌深度解读: ${card.name}</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px;">这张牌位于 "${currentReading.cards[index].positionName}" 的位置，为您提供重要的指引与启示。</p>
+                </div>
+                
+                <div class="card-detail">
+                    <div class="card-detail-header">
+                        <div class="card-detail-name" style="font-size: 2rem;">
+                            ${card.name} <span style="font-size: 1.2rem; color: var(--text-secondary);">(${card.number})</span>
+                        </div>
+                        <div class="card-detail-position ${positionClass}" style="padding: 10px 20px; font-size: 1.1rem;">
+                            ${positionText} · ${card.element} · ${card.planet}
+                        </div>
+                    </div>
+                    
+                    <div class="card-detail-content">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px;">
+                            <div>
+                                <h4 style="color: ${positionClass === "upright" ? "var(--success-color)" : "var(--warning-color)"}; margin-bottom: 12px;">
+                                    <i class="fas fa-sun"></i> ${positionText}含义
+                                </h4>
+                                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border-left: 4px solid ${positionClass === "upright" ? "var(--success-color)" : "var(--warning-color)"};">
+                                    ${meaning.split(",").map(item => `<div style="margin-bottom: 8px; font-size: 1.1rem;">✦ ${item.trim()}</div>`).join("")}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 style="color: ${isHighEnergy ? "var(--success-color)" : "var(--warning-color)"}; margin-bottom: 12px;">
+                                    <i class="fas fa-bolt"></i> 能量分析
+                                </h4>
+                                <div style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px;">
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                            <span>能量等级</span>
+                                            <span style="font-weight: 700;">${energyPercentage}%</span>
+                                        </div>
+                                        <div class="energy-bar" style="width: 100%; margin: 0;">
+                                            <div class="energy-fill ${positionClass}" style="width: ${energyPercentage}%"></div>
+                                        </div>
+                                    </div>
+                                    <div style="background: rgba(138, 43, 226, 0.1); padding: 12px; border-radius: 8px; border: 1px solid rgba(138, 43, 226, 0.3);">
+                                        <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                            ${isHighEnergy ? 
+                                                "⚡ 这张牌能量充沛，影响力强烈，对您当前状况有着显著的作用。" : 
+                                                energyPercentage > 40 ? 
+                                                    "🌀 能量中等，需要您适当关注并平衡相关方面的能量。" : 
+                                                    "🔮 能量较低，提示您需要注意潜在的问题或需要调整的领域。"}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 25px;">
+                            <h4 style="color: var(--neon-blue); margin-bottom: 15px; font-size: 1.3rem;">
+                                <i class="fas fa-book"></i> 深度智慧启示
+                            </h4>
+                            <div style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(138, 43, 226, 0.05) 100%); 
+                                      padding: 25px; 
+                                      border-radius: 16px; 
+                                      border-left: 5px solid var(--neon-blue);
+                                      line-height: 1.8;">
+                                <p style="font-size: 1.1rem; color: var(--text-primary);">
+                                    ${generateCardInterpretation(card, index)}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; margin-top: 25px;">
+                    <button class="btn secondary" id="backToReading">
+                        <i class="fas fa-arrow-left"></i> 返回完整占卜
+                    </button>
+                    <button class="btn" id="drawAgain" style="background: linear-gradient(135deg, var(--mystic-purple) 0%, #4169e1 100%);">
+                        <i class="fas fa-redo"></i> 重新抽牌
+                    </button>
+                </div>
+            `;
+            
+            readingResult.innerHTML = detailHtml;
+            
+            // 绑定返回按钮事件
+            document.getElementById("backToReading").addEventListener("click", displayReading);
+            document.getElementById("drawAgain").addEventListener("click", drawCards);
+            
+            // 为高能量卡片添加特殊效果
+            if (isHighEnergy) {
+                const cardPreview = readingResult.querySelector(".tarot-card.front");
+                if (cardPreview) {
+                    cardPreview.classList.add("glow");
+                }
+            }
+        }
+
+        // 生成卡片解读 - 神秘学风格
+        function generateCardInterpretation(card, index) {
+            const position = currentReading.cards[index].positionName;
+            const element = card.element;
+            const planet = card.planet;
+            const energyLevel = card.energyLevel;
+            const isUpright = card.position === "upright";
+            const keywords = isUpright ? card.upright.split(",") : card.reversed.split(",");
+            
+            const mysticalTexts = [
+                `在${position}的领域里，${card.name}牌展现着${isUpright ? "光明" : "隐秘"}的力量。这张牌连接着${element}元素，受到${planet}的守护，${isUpright ? "正位" : "逆位"}的能量如${energyLevel > 70 ? "星辰般闪耀" : energyLevel > 40 ? "溪流般流淌" : "薄雾般弥漫"}。牌面启示：${keywords.map(kw => "「" + kw.trim() + "」").join("、")}。`,
+                
+                `宇宙的能量在${position}的位置凝聚成${card.name}的形态。${element}元素的本质与${planet}的智慧交织，形成${isUpright ? "正向的启示" : "反思的镜面"}。这张牌提醒您：${keywords[0].trim()}是当下的关键，${keywords[1]?.trim() || "内在的智慧"}是前行的指引。${energyLevel > 70 ? "强大的能量场" : "微妙的能量振动"}正在影响这个领域。`,
+                
+                `塔罗的奥秘中，${card.name}是第${card.number}张主牌，象征着${isUpright ? "显露" : "隐藏"}的真理。在${position}的维度，${element}的能量与${planet}的法则共同作用，呈现${isUpright ? "建设性" : "转化性"}的趋势。启示核心：${keywords.slice(0, 2).map(kw => "✦ " + kw.trim()).join(" ")}。${energyLevel > 70 ? "这能量值得您充分关注" : "请细心体察这份指引"}。`,
+                
+                `${card.name}牌立于${position}的位置，${isUpright ? "正面朝向光明" : "背面映照阴影"}。${element}的元素本质与${planet}的星体智慧在此交汇，形成${energyLevel}%的能量共振。神秘启示：${keywords.map(kw => kw.trim()).join(" → ")}。这张牌是${isUpright ? "明灯" : "镜子"}，照亮${position}领域的真相。`
+            ];
+            
+            const esotericMessages = [
+                "请静心感受这张牌传递的振动频率，答案就在您内心的回响中。",
+                "宇宙的智慧通过这张牌向您低语，倾听那些无声的启示。",
+                "每一个符号都是通往深层理解的桥梁，让直觉引导您的解读。",
+                "能量在流动中揭示真相，让这张牌成为您内在探索的向导。",
+                "神秘学的智慧不在于预测，而在于理解能量如何在现实中显化。"
+            ];
+            
+            const selectedText = mysticalTexts[Math.floor(Math.random() * mysticalTexts.length)];
+            const esotericMessage = esotericMessages[Math.floor(Math.random() * esotericMessages.length)];
+            
+            return `${selectedText} ${esotericMessage}`;
+        }
+
+        // 显示完整占卜解读
+        function displayReading() {
+            readingResult.innerHTML = "";
+            
+            const template = readingTemplates[currentReading.type];
+            let resultHtml = `
+                <h3 class="reading-title"><i class="fas fa-scroll"></i> ${template.name}解读</h3>
+                <p>${template.description}</p>
+            `;
+            
+            if (currentReading.question) {
+                resultHtml += `<p><strong>问题焦点:</strong> ${currentReading.question}</p>`;
+            }
+            
+            // 显示每张牌的简要信息
+            currentReading.cards.forEach((card, index) => {
+                const positionClass = card.position === "upright" ? "upright" : "reversed";
+                const positionText = card.position === "upright" ? "正位" : "逆位";
+                const energyPercentage = card.energyLevel;
+                
+                resultHtml += `
+                    <div class="card-detail">
+                        <div class="card-detail-header">
+                            <div class="card-detail-name">${card.name} (${card.number}) - ${card.positionName}</div>
+                            <div class="card-detail-position ${positionClass}">${positionText} · 能量 ${energyPercentage}%</div>
+                        </div>
+                        <div class="card-detail-content">
+                            <h4>${positionText}含义:</h4>
+                            <p>${card.position === "upright" ? card.upright.replace(/,/g, " · ") : card.reversed.replace(/,/g, " · ")}</p>
+                            <button class="btn secondary view-detail-btn" data-index="${index}" style="margin-top: 10px; padding: 8px 12px; font-size: 0.9rem;">
+                                <i class="fas fa-info-circle"></i> 查看详细解读
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // 整体解读
+            resultHtml += `
+                <div class="reading-interpretation">
+                    <h4><i class="fas fa-lightbulb"></i> 整体解读与建议</h4>
+                    <p>${generateOverallInterpretation()}</p>
+                </div>
+            `;
+            
+            readingResult.innerHTML = resultHtml;
+            
+            // 绑定查看详情按钮事件
+            document.querySelectorAll(".view-detail-btn").forEach(btn => {
+                btn.addEventListener("click", function() {
+                    const index = parseInt(this.getAttribute("data-index"));
+                    showCardDetail(currentReading.cards[index], index);
+                });
+            });
+        }
+
+        // 生成整体解读
+        function generateOverallInterpretation() {
+            const template = readingTemplates[currentReading.type];
+            const uprightCount = currentReading.cards.filter(card => card.position === "upright").length;
+            const reversedCount = currentReading.cards.filter(card => card.position === "reversed").length;
+            const totalCards = currentReading.cards.length;
+            const positiveEnergy = currentReading.cards.filter(card => card.position === "upright").reduce((sum, card) => sum + card.energyLevel, 0);
+            const averageEnergy = Math.round((positiveEnergy + (totalCards - uprightCount) * 50) / totalCards);
+            
+            let interpretations = [];
+            
+            if (currentReading.type === "single") {
+                interpretations = [
+                    `这张${currentReading.cards[0].name}牌是您当前状况的核心象征。${currentReading.cards[0].position === "upright" ? "正位" : "逆位"}的出现表明${currentReading.cards[0].position === "upright" ? "积极的能量正在流动，支持您当前的方向" : "可能存在一些阻碍或挑战需要注意"}。`,
+                    `这张牌的能量等级为${currentReading.cards[0].energyLevel}%，表示${currentReading.cards[0].energyLevel > 70 ? "强烈的能量影响" : currentReading.cards[0].energyLevel > 40 ? "中等强度的能量" : "需要特别留意的能量"}。`,
+                    `专注于这张牌传递的信息，它为您提供了当前处境的深刻洞察。建议您反思牌面含义，并将其应用到当前的生活情境中。`
+                ];
+            } else if (currentReading.type === "three") {
+                interpretations = [
+                    `过去-现在-未来的牌阵揭示了您人生旅程的脉络。整体能量等级为${averageEnergy}%，表示${averageEnergy > 70 ? "较为积极的能量趋势" : averageEnergy > 40 ? "中性的能量平衡" : "需要特别关注的能量状态"}。`,
+                    `过去的位置（${currentReading.cards[0].name}）显示了${currentReading.cards[0].position === "upright" ? "积极的影响和基础" : "需要释放或学习的课题"}，`,
+                    `现在的位置（${currentReading.cards[1].name}）表明${currentReading.cards[1].position === "upright" ? "您正处于正确的轨道上" : "需要调整当前的方向或方法"}，`,
+                    `未来的位置（${currentReading.cards[2].name}）预示${currentReading.cards[2].position === "upright" ? "积极的发展可能性" : "潜在的挑战需要注意"}。`,
+                    `在${totalCards}张牌中，有${uprightCount}张正位和${reversedCount}张逆位，${uprightCount > reversedCount ? "整体能量较为积极向上" : uprightCount === reversedCount ? "能量处于平衡状态" : "需要更多注意潜在问题"}。`
+                ];
+            } else {
+                interpretations = [
+                    `这个${template.name}揭示了多方面的信息。整体能量等级为${averageEnergy}%。`,
+                    `在${totalCards}张牌中，有${uprightCount}张正位和${reversedCount}张逆位。`,
+                    uprightCount > reversedCount 
+                        ? "整体能量倾向于积极发展，但仍需注意逆位牌提示的潜在挑战与调整空间。" 
+                        : uprightCount === reversedCount 
+                            ? "能量处于平衡状态，正位与逆位的牌数相等，提示需要兼顾各方因素。" 
+                            : "逆位牌较多，提示需要特别注意相关领域的调整、反思与内在工作。",
+                    "请结合每张牌的具体位置、正逆位含义和能量等级，综合理解这个牌阵传递的信息。",
+                    "塔罗牌的指引旨在提供视角与启示，最终的决定和行动权在您自己手中。"
+                ];
+            }
+            
+            if (currentReading.question) {
+                interpretations.push(`关于"${currentReading.question}"的问题，牌阵给出了以上启示。建议您结合自身实际情况，做出最适合自己的选择。`);
+            }
+            
+            return interpretations.join(" ");
+        }
+
+        // 重置占卜
+        function resetReading() {
+            currentReading = {
+                type: "single",
+                cards: [],
+                question: "",
+                positionType: "both",
+                theme: "modern"
+            };
+            
+            tarotCardsContainer.innerHTML = `
+                <div class="tarot-card back" id="instructionCard">
+                    <div class="card-decoration"></div>
+                    <div class="card-content">
+                        <i class="fas fa-star-and-crescent tarot-card-icon"></i>
+                        <div class="tarot-card-name">点击"洗牌并抽牌"开始占卜</div>
+                        <div class="tarot-card-meaning">探索未知的命运</div>
+                    </div>
+                </div>
+            `;
+            
+            readingResult.innerHTML = "";
+            questionFocusInput.value = "";
+            readingTypeSelect.value = "single";
+            
+            // 重置单选按钮
+            document.querySelectorAll(".radio-option").forEach(option => {
+                option.classList.remove("selected");
+            });
+            document.querySelector('.radio-option[data-value="both"]').classList.add("selected");
+            document.querySelector('.radio-option[data-value="major"]').classList.add("selected");
+            document.querySelector('.radio-option[data-value="modern"]').classList.add("selected");
+            
+            // 应用默认主题
+            applyTheme("modern");
+        }
+
+        // 简单的庆祝效果
+        function showConfetti() {
+            const confettiCount = 30;
+            const colors = ['#8a2be2', '#00d4ff', '#ff00ff', '#00ff9d', '#ff6b9d', '#9370db'];
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-20px';
+                confetti.style.zIndex = '9999';
+                confetti.style.pointerEvents = 'none';
+                
+                document.body.appendChild(confetti);
+                
+                const animation = confetti.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(${window.innerHeight + 20}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: 1000 + Math.random() * 2000,
+                    easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                });
+                
+                animation.onfinish = () => {
+                    confetti.remove();
+                };
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+</body>
+</html>
